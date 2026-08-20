@@ -1,0 +1,41 @@
+// Язык викторины — только английский (решение клиента, 2026-08-17).
+// Правильные ответы — из финального дока (жирная разметка).
+// options: строка или { label, img } (q5 — картинки логотипов).
+export const QUESTIONS = [
+  { id: 'q1', correct: 0,
+    text: 'In what year was Team Spirit founded?',
+    options: ['2015', '2014', '2016', '2018'] },
+  { id: 'q2', correct: 0,
+    text: 'Which Internationals did the team win?',
+    options: ['TI10 and TI12', 'TI9 and TI11', 'TI10 and TI11', 'TI11 and TI13'] },
+  { id: 'q3', correct: 3,
+    text: 'Which of these players has never played for Team Spirit?',
+    options: ['durachyo', 'XBOCT', 'god (G)', 'No[o]ne'] },
+  { id: 'q4', correct: 0,
+    text: 'Which Team Spirit player has earned the most prize money over their career?',
+    options: ['Miposhka', 'Yatoro', 'Collapse', 'Larl'] },
+  { id: 'q5', correct: 0,
+    // соответствие файлов вариантам подобрано по содержимому — сверить с Тарасом
+    text: 'What does Team Spirit’s current logo look like?',
+    options: [
+      { label: 'Current logo', img: 'assets/img/logo-current.png' },
+      { label: 'Previous logo', img: 'assets/img/logo-previous.png' },
+      { label: 'Original 2015 logo', img: 'assets/img/logo-2015.png' },
+      { label: 'AI dragon', img: 'assets/img/logo-ai.png' },
+    ] },
+  { id: 'q6', correct: 0,
+    text: 'Which game did Slava Art1st (Dota 2 host) play professionally?',
+    options: ['Valorant', 'Dota 2', 'Apex Legends', 'League of Legends'] },
+  { id: 'q7', correct: 0,
+    text: 'Which theme did the team walk out to at the 2021 AniMajor?',
+    options: ['Naruto main theme', 'Tokyo Ghoul main theme', 'Attack on Titan main theme', 'Pokémon main theme'] },
+  { id: 'q8', correct: 0,
+    text: 'Who has been with Team Spirit the longest?',
+    options: ['SilverName', 'Wycc', 'S0tF1k', 'magixx'] },
+  { id: 'q9', correct: 0,
+    text: 'Who came up with the name “Team Spirit”?',
+    options: ['sh4dowehhh', 'Goblak', 'Cheshir', 'RAMZES666'] },
+  { id: 'q10', correct: 2,
+    text: 'Which of these esports titles has Team Spirit never competed in?',
+    options: ['League of Legends', 'PUBG Mobile', 'Apex Legends', 'Hearthstone'] },
+];

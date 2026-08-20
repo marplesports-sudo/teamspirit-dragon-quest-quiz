@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Team Spirit — Dragon Quest</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <main id="app">
+    <header class="case-header">
+      <span class="case-no">CASE № TS-D/2026</span>
+      <span class="case-secret">TEAM SPIRIT · DRAGON QUEST</span>
+    </header>
+    <section id="screen-intro" class="screen">
+      <!-- PENDING-MATERIALS: видео Яторо; при отсутствии файла блок скрывается -->
+      <video id="intro-video" src="assets/video/intro.mp4" playsinline controls preload="metadata" hidden></video>
+      <div id="intro-text" class="narrative"></div>
+      <button id="btn-start" class="btn-primary"></button>
+    </section>
+    <section id="screen-quiz" class="screen" hidden>
+      <p id="quiz-progress" class="progress"></p>
+      <h2 id="quiz-question"></h2>
+      <div id="quiz-options"></div>
+    </section>
+    <section id="screen-result" class="screen" hidden>
+      <h2 id="result-title"></h2>
+      <p id="result-score" class="result-score"></p>
+      <div id="result-text" class="result-text"></div>
+      <p id="result-retries" class="result-retries"></p>
+      <button id="btn-retry" class="btn-primary" hidden></button>
+    </section>
+    <footer class="case-footer" aria-hidden="true">— END OF FILE —</footer>
+  </main>
+  <div id="admin-bar" hidden><button id="btn-admin-reset"></button></div>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

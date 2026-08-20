@@ -1,0 +1,40 @@
+# TeamSpirit Quiz — отдельный vhost для статики.
+# add_header в location перекрывает server-level, поэтому security-набор продублирован в каждом.
+server {
+    listen 80;
+    listen [::]:80;
+    server_name quiz.example.com;
+
+    root /var/www/teamspirit-quiz;
+    index index.html;
+    server_tokens off;
+
+    access_log /var/log/nginx/quiz.access.log;
+    error_log  /var/log/nginx/quiz.error.log;
+
+    location ~ /\. { deny all; }
+
+    # html/js/данные всегда ревалидируются — хотфиксы должны доезжать сразу
+    location / {
+        add_header Cache-Control "no-cache";
+        add_header X-Content-Type-Options nosniff always;
+        add_header X-Frame-Options DENY always;
+        add_header Referrer-Policy no-referrer always;
+        add_header Content-Security-Policy "default-src 'self'; img-src 'self' data:; media-src 'self'; base-uri 'none'; frame-ancestors 'none'" always;
+        try_files $uri /index.html;
+    }
+
+    # otf нет в стандартном mime.types — без этого уйдёт как octet-stream
+    location ~* \.otf$ {
+        default_type font/otf;
+        expires 7d;
+        add_header Cache-Control "public";
+        add_header X-Content-Type-Options nosniff always;
+    }
+
+    location ~* \.(mp4|png|jpg|jpeg|webp|svg)$ {
+        expires 7d;
+        add_header Cache-Control "public";
+        add_header X-Content-Type-Options nosniff always;
+    }
+}

@@ -1,0 +1,208 @@
+/* Дизайн по фигме «Team Spirit: Дело Дракона» (страница Landing, мобилка 360/296):
+   тёмный фон #0b0e0f, текст JMH Typewriter Bold #dadada, бумажные блоки —
+   серая фотопластина (paper.jpg из макета) с тёмными «чернилами», красный штамп CONFIDENTIAL.
+   Акценты: зелёный #1ed94b, красный #900e0e, жёлтый #ffb916. Кнопки — светлый градиент, чёрный текст, прямые углы. */
+@font-face { font-family: 'JMH Typewriter'; src: url('../assets/fonts/JMHTypewriter.otf') format('opentype'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'JMH Typewriter'; src: url('../assets/fonts/JMHTypewriter-Bold.otf') format('opentype'); font-weight: 700; font-display: swap; }
+
+:root {
+  --bg: #0b0e0f;
+  --text: #dadada;
+  --ink: #0c0e0f;
+  --muted: #6c6e69;
+  --red: #900e0e;
+  --yellow: #ffb916;
+  --green: #1ed94b;
+  --btn-from: #dadada;
+  --btn-to: #bbbbbb;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'JMH Typewriter', 'Courier New', monospace;
+  font-weight: 700;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  padding: 0 16px 40px;
+}
+
+#app {
+  width: 100%;
+  max-width: 392px; /* 360 сетка макета + боковые поля страницы */
+}
+
+.case-header {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 8px;
+  border-bottom: 1px solid #40413e;
+  padding: 18px 0 10px; margin-bottom: 24px;
+  font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--text);
+}
+.case-secret { color: var(--muted); text-align: right; }
+
+.case-footer {
+  margin-top: 32px; text-align: center;
+  font-size: 10px; letter-spacing: .3em; color: var(--muted);
+}
+
+.screen[hidden], #admin-bar[hidden], #intro-video[hidden], #btn-retry[hidden] { display: none; }
+.screen { animation: sheet-in .28s ease-out; }
+@keyframes sheet-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+h1, h2 { line-height: 1.25; margin: 0 0 14px; color: var(--text); }
+h1 { font-size: 28px; }
+h2 { font-size: 22px; }
+
+video {
+  /* видео Яторо вертикальное (9:16). Ширину зажимаем так, чтобы высота кадра
+     не превышала 55vh — иначе интро-текст и кнопка уезжают за экран.
+     Ограничение по ширине (а не max-height) убирает чёрные поля по бокам. */
+  display: block;
+  width: 100%;
+  max-width: min(100%, calc(55vh * 9 / 16));
+  margin: 0 auto 20px;
+  border: 1px solid #40413e;
+  background: #000;
+  object-fit: contain; /* страховка, если пропорции файла изменятся */
+}
+
+.option:focus-visible, .btn-primary:focus-visible, #btn-admin-reset:focus-visible {
+  outline: 2px solid var(--green); outline-offset: 2px;
+}
+
+/* нарратив — «бумажный» блок: серая пластина из макета, тёмные чернила */
+.narrative {
+  background: url('../assets/img/paper.jpg') center / cover;
+  color: var(--ink);
+  padding: 22px 20px;
+  margin: 0 0 22px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .55);
+}
+.narrative p { font-size: 16px; line-height: 1.55; margin: 0 0 12px; }
+.narrative p:last-child { margin-bottom: 0; }
+
+/* кнопка — светлый градиент, чёрный текст, прямые углы (Landing Button) */
+.btn-primary {
+  display: block; width: 100%;
+  margin: 0 0 12px; padding: 17px 14px; min-height: 58px;
+  font: inherit; font-size: 20px;
+  background: linear-gradient(180deg, var(--btn-from) 0%, var(--btn-to) 100%);
+  color: #000; border: none; cursor: pointer;
+  transition: filter .12s ease, transform .12s ease;
+}
+.btn-primary:active { transform: translateY(2px); }
+
+.progress {
+  font-size: 12px; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--muted); margin: 0 0 12px;
+}
+
+/* варианты — тёмные плашки с рамкой */
+.option {
+  display: block; width: 100%; text-align: left;
+  font: inherit; font-size: 15px; line-height: 1.35;
+  margin: 10px 0; padding: 15px 14px 15px 48px; min-height: 52px;
+  background: rgba(218, 218, 218, .04);
+  color: var(--text);
+  border: 1px solid #40413e;
+  position: relative; cursor: pointer;
+  transition: border-color .12s ease, background .12s ease;
+}
+.option::before {
+  content: '[ ]';
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  color: var(--muted);
+}
+/* hover — только на устройствах с реальным курсором (мышь/трекпад).
+   На тач-экранах :hover «залипает» после тапа и, поскольку следующий вопрос
+   рендерится в том же месте экрана, обводка визуально переносится на новую
+   кнопку — баг мобильных браузеров, а не разметки. На тач hover не подключаем. */
+@media (hover: hover) and (pointer: fine) {
+  .option:hover { border-color: var(--green); background: rgba(30, 217, 75, .07); }
+  .option:hover::before { content: '[x]'; color: var(--green); }
+}
+.option:active { border-color: var(--green); background: rgba(30, 217, 75, .15); }
+.option:active::before { content: '[x]'; color: var(--green); }
+
+/* вопрос про логотипы — сетка 2×2 с картинками; логотипы чёрные, поэтому светлая подложка */
+.options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.options-grid .option-img {
+  margin: 0; padding: 14px; min-height: 0;
+  background: url('../assets/img/paper.jpg') center / cover;
+  display: flex; align-items: center; justify-content: center;
+}
+.options-grid .option-img::before { top: 10px; transform: none; }
+.options-grid .option-img img {
+  display: block; width: 100%; height: 110px; object-fit: contain;
+}
+
+/* результат — счёт-штамп на бумажной пластине */
+#screen-result .result-score {
+  display: inline-block;
+  font-size: 52px; line-height: 1;
+  padding: 12px 24px; margin: 6px 0 18px;
+  border: 4px solid currentColor; border-radius: 4px;
+  transform: rotate(-6deg);
+  animation: stamp .4s cubic-bezier(.2, 1.6, .4, 1);
+}
+@keyframes stamp {
+  0%   { opacity: 0; transform: rotate(-14deg) scale(2.2); }
+  60%  { opacity: 1; transform: rotate(-6deg) scale(.96); }
+  100% { opacity: 1; transform: rotate(-6deg) scale(1); }
+}
+.result-score[data-band="red"]    { color: var(--red); }
+.result-score[data-band="yellow"] { color: var(--yellow); }
+.result-score[data-band="green"]  { color: var(--green); }
+
+.result-text {
+  background: url('../assets/img/paper.jpg') center / cover;
+  color: var(--ink);
+  padding: 20px;
+  margin: 0 0 14px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .55);
+}
+.result-text p { font-size: 15px; line-height: 1.5; margin: 0 0 8px; }
+.result-text p:last-child { margin-bottom: 0; }
+.result-retries { font-size: 13px; color: var(--muted); letter-spacing: .06em; margin: 0 0 18px; }
+
+/* зелёный банд — конечный экран квиза: доска закрыта, штамп CONFIDENTIAL из макета фигмы */
+#screen-result:has(.result-score[data-band="green"]) { position: relative; }
+#screen-result:has(.result-score[data-band="green"])::after {
+  content: '';
+  position: absolute; right: 4px; top: 44px;
+  width: 130px; height: 130px;
+  background: url('../assets/img/stamp.png') center / contain no-repeat;
+  opacity: .9;
+  transform: rotate(12deg);
+  pointer-events: none;
+}
+
+#admin-bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+  background: #000; border-top: 1px solid #40413e;
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+  display: flex; justify-content: center;
+}
+#btn-admin-reset {
+  font: inherit; font-size: 13px; letter-spacing: .12em; text-transform: uppercase;
+  background: transparent; color: var(--yellow);
+  border: 1px solid var(--yellow); padding: 10px 22px; min-height: 44px; cursor: pointer;
+}
+#btn-admin-reset:active { background: var(--yellow); color: #000; }
+
+@media (prefers-reduced-motion: reduce) {
+  .screen, #screen-result .result-score { animation: none; }
+  .btn-primary { transition: none; }
+}
+
+@media (min-width: 700px) {
+  body { padding-top: 24px; }
+}
