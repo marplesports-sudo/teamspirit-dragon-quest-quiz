@@ -1,7 +1,7 @@
 import { score, band, retriesLeft } from './quiz-logic.js';
 import { createState } from './state.js';
 import { QUESTIONS } from '../data/questions.js';
-import { t } from './i18n.js';
+import { t, resultBody } from './i18n.js';
 
 // localStorage может быть недоступен (приватный режим, киоск-профили) — тогда играем из памяти
 function safeStorage() {
@@ -96,10 +96,10 @@ function renderResult() {
   $('result-title').textContent = t('resultTitle');
   $('result-score').textContent = `${lastScore}/${QUESTIONS.length}`;
   $('result-score').dataset.band = b;
-  renderParagraphs($('result-text'), t({ red: 'resultTextRed', yellow: 'resultTextYellow', green: 'resultTextGreen' }[b]));
-  $('result-retries').textContent = b === 'green' ? '' :
-    left === 0 ? t('noRetries') :
-    left === 1 ? t('retriesLeftOne') : t('retriesLeftMany', { n: left });
+  renderParagraphs($('result-text'), resultBody(b, left));
+  // счётчик под бумагой — только когда попыток не осталось: при left > 0
+  // число уже названо в самом тексте результата, дублировать незачем
+  $('result-retries').textContent = b !== 'green' && left === 0 ? t('noRetries') : '';
   $('btn-retry').hidden = b === 'green' || left === 0;
   $('btn-retry').textContent = t('retry');
   show('screen-result');

@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { QUESTIONS } from '../data/questions.js';
-import { UI, t } from '../js/i18n.js';
+import { UI, t, resultBody } from '../js/i18n.js';
 
 test('10 questions, each with 4 options and valid correct index', () => {
   assert.equal(QUESTIONS.length, 10);
@@ -34,4 +34,25 @@ test('UI strings: required keys exist, t interpolates vars', () => {
   }
   assert.equal(t('questionOf', { i: 3, n: 10 }), 'Question 3 of 10');
   assert.equal(t('missing-key'), 'missing-key');
+});
+
+test('result body: the attempts sentence matches the retries actually left', () => {
+  // первая попытка — формулировки канона из клиентского дока
+  assert.match(resultBody('red', 1), /You have one more attempt to prove that you’re not here by accident\.$/);
+  assert.match(resultBody('yellow', 2), /You have two more attempts to improve your result\.$/);
+
+  // ретраи ещё есть, но меньше — число подстраивается, а не врёт про «two»
+  assert.match(resultBody('yellow', 1), /You have one more attempt to improve your result\.$/);
+
+  // ретраев не осталось — предложения про попытки нет вовсе
+  assert.doesNotMatch(resultBody('red', 0), /attempt/);
+  assert.doesNotMatch(resultBody('yellow', 0), /attempt/);
+
+  // зелёный — конечный экран, про попытки не говорим никогда
+  assert.doesNotMatch(resultBody('green', 0), /attempt/);
+
+  // первое предложение банда на месте во всех случаях
+  for (const [b, left] of [['red', 1], ['red', 0], ['yellow', 2], ['yellow', 0], ['green', 0]]) {
+    assert.ok(resultBody(b, left).startsWith(UI[{ red: 'resultTextRed', yellow: 'resultTextYellow', green: 'resultTextGreen' }[b]]), `${b}/${left}`);
+  }
 });
