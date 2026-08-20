@@ -2,6 +2,7 @@ import { score, band, retriesLeft } from './quiz-logic.js';
 import { createState } from './state.js';
 import { QUESTIONS } from '../data/questions.js';
 import { t, resultBody } from './i18n.js';
+import { isResetPin } from './config.js';
 
 // localStorage может быть недоступен (приватный режим, киоск-профили) — тогда играем из памяти
 function safeStorage() {
@@ -108,6 +109,46 @@ function renderResult() {
 function startAttempt() { qIndex = 0; answers = []; state.startAttempt(); renderQuestion(); }
 $('btn-start').addEventListener('click', startAttempt);
 $('btn-retry').addEventListener('click', startAttempt);
+
+// Сброс под пином — виден на всех экранах, чтобы проверяющий мог обнулить квиз
+// и когда гость упёрся в «No retries left», и когда бросил тест на середине.
+function setupReset() {
+  const toggle = $('btn-reset'), form = $('reset-pin'), input = $('reset-pin-input'), error = $('reset-pin-error');
+  toggle.textContent = t('resetToggle');
+  $('reset-pin-label').textContent = t('resetPinLabel');
+  input.setAttribute('aria-label', t('resetPinLabel'));
+  $('btn-reset-submit').textContent = t('resetPinSubmit');
+
+  function close() {
+    form.hidden = true;
+    toggle.setAttribute('aria-expanded', 'false');
+    input.value = '';
+    error.textContent = '';
+  }
+
+  toggle.addEventListener('click', () => {
+    if (form.hidden) {
+      form.hidden = false;
+      toggle.setAttribute('aria-expanded', 'true');
+      input.focus();
+    } else close();
+  });
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    if (!isResetPin(input.value)) {
+      error.textContent = t('resetPinWrong');
+      input.value = '';
+      input.focus();
+      return;
+    }
+    state.reset();
+    location.reload();
+  });
+
+  form.addEventListener('keydown', e => { if (e.key === 'Escape') { close(); toggle.focus(); } });
+}
+setupReset();
 
 if (new URLSearchParams(location.search).has('admin')) {
   $('admin-bar').hidden = false;

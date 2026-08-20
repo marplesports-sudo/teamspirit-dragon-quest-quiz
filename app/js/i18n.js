@@ -17,6 +17,11 @@ export const UI = {
   resultTextGreen: 'The test is complete. There’s no doubt. You are an agent of the Community.\nYou now have full access to the information Yatoro has.',
   adminReset: 'Reset quiz',
   questionOf: 'Question {i} of {n}',
+  // сброс под пином в подвале — для проверяющего на ивенте
+  resetToggle: 'Reset',
+  resetPinLabel: 'Supervisor PIN',
+  resetPinSubmit: 'OK',
+  resetPinWrong: 'Wrong PIN',
 };
 
 export function t(key, vars = {}) {

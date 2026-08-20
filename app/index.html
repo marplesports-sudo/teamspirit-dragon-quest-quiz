@@ -30,7 +30,18 @@
       <p id="result-retries" class="result-retries"></p>
       <button id="btn-retry" class="btn-primary" hidden></button>
     </section>
-    <footer class="case-footer" aria-hidden="true">— END OF FILE —</footer>
+    <footer class="case-footer">
+      <span aria-hidden="true">— END OF FILE —</span>
+      <!-- сброс под пином: проверяющий на ивенте обнуляет квиз для следующего гостя -->
+      <button id="btn-reset" class="reset-toggle" aria-expanded="false" aria-controls="reset-pin"></button>
+      <form id="reset-pin" class="reset-pin" hidden>
+        <label id="reset-pin-label" for="reset-pin-input" class="visually-hidden"></label>
+        <input id="reset-pin-input" type="password" inputmode="numeric" autocomplete="off"
+               maxlength="8" enterkeyhint="done" class="reset-pin-input">
+        <button type="submit" id="btn-reset-submit" class="reset-pin-submit"></button>
+        <p id="reset-pin-error" class="reset-pin-error" role="status" aria-live="polite"></p>
+      </form>
+    </footer>
   </main>
   <div id="admin-bar" hidden><button id="btn-admin-reset"></button></div>
   <script type="module" src="js/app.js"></script>
